@@ -1,7 +1,0 @@
-Python 3.5.2
-
-SQLite 3.26
-
-Django 2.2.4
-
-Bootstrap 4.3.1
