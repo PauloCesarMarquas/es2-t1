@@ -1,0 +1,8 @@
+lançar frequencia e notas do aluno
+	listar 
+	adicionar
+	remover
+
+correçoes:
+	telas
+	relatorios

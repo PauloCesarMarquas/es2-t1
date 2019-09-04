@@ -1,0 +1,55 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+  <meta charset="UTF-8">  
+  <title>Index</title>  
+  {% load staticfiles %}  
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"/>  
+</head>  
+<body>  
+<form method="POST" class="post-form" action="/aluno">  
+      {% csrf_token %}  
+  <div class="container">  
+<br>  
+  <div class="form-group row">  
+  <label class="col-sm-1 col-form-label"></label>  
+  <div class="col-sm-4">  
+  <h3>Enter Details</h3>  
+  </div>  
+</div>  
+  <div class="form-group row">  
+  <label class="col-sm-2 col-form-label">Aluno Id:</label>  
+  <div class="col-sm-4">  
+    {{ form.id }}  
+  </div>  
+</div>  
+<div class="form-group row">  
+  <label class="col-sm-2 col-form-label">Aluno Name:</label>  
+  <div class="col-sm-4">  
+    {{ form.nome }}  
+  </div>  
+</div>  
+  <div class="form-group row">  
+  <label class="col-sm-2 col-form-label">Aluno Email:</label>  
+  <div class="col-sm-4">  
+    {{ form.email }}  
+  </div>  
+</div>  
+  <div class="form-group row">  
+  <label class="col-sm-2 col-form-label">Aluno Telefone:</label>  
+  <div class="col-sm-4">  
+    {{ form.telefone }}  
+  </div>  
+</div>  
+  <div class="form-group row">  
+  <label class="col-sm-1 col-form-label"></label>  
+  <div class="col-sm-4">  
+  <button type="submit" class="btn btn-primary">Submit</button>  
+  </div>  
+</div>  
+  </div>  
+</form>  
+</body>  
+</html>  

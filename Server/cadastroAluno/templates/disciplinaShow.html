@@ -1,0 +1,53 @@
+<!DOCTYPE html>  
+<html lang="en">  
+    <head>  
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+        <meta charset="UTF-8">  
+        <title>Disciplina Records</title>  
+         {% load staticfiles %}  
+        <link rel="stylesheet" href="{% static 'css/style.css' %}"/>  
+    </head>  
+    <body>  
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12" align="center">
+                    <a href="/disciplina" class="btn btn-primary stretched-link">
+                        Cadastrar
+                    </a>
+                    <a href="/disciplinaShow" class="btn btn-primary stretched-link">
+                        Editar
+                    </a>
+                </div>
+                <br><br><br><br><br>
+            </div>
+        </div> 
+        <table class="table table-striped table-bordered table-sm">  
+            <thead class="thead-dark">  
+            <tr>  
+                <th>Disciplina ID</th>  
+                <th>Curso</th>                  
+                <th>Nome</th>  
+
+            </tr>  
+            </thead>  
+            <tbody>  
+        {% for disciplina in disciplinas %}  
+            <tr>  
+                <td>{{ disciplina.id }}</td>  
+                <td>{{ disciplina.curso.nome }}</td>  
+                <td>{{ disciplina.nome }}</td>  
+                
+                <td>  
+                    <a href="/disciplinaEdit/{{ disciplina.id }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>  
+                    <a href="/delete/{{ disciplina.id }}">Delete</a>  
+                </td>  
+            </tr>  
+        {% endfor %}  
+            </tbody>  
+        </table>  
+        <br>  
+        <br>  
+        <center><a href="/disciplina" class="btn btn-primary">Add New Record</a></center>  
+    </body>  
+</html>  

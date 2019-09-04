@@ -1,0 +1,48 @@
+22 de agosto de 2019
+
+Versão do Python decidida como 3, banco de dados decidido como MariaDB, repositório como Github público
+
+
+23 de agosto de 2019
+
+[Paulo] tutorial para servidor de troca de mensagens
+
+
+25 de agosto de 2019
+
+[Giovani] Modelo de Entidade de Relação (MER) no Workbench
+
+MariaDB atualizado para versão 10.4.7
+
+
+
+27 de agosto de 2019
+
+framework decidido como Django
+Problemas:[Paulo] O pacote libapparmor1 foi corrompido ao atualaziar o ubuntu 16 para o 18. consertou ao reinstalar o Ubuntu para versão 18.
+
+[Pedro] iniciou documentação de versões de reuniões diárias.
+
+
+
+28 de agosto de 2019
+
+Models estão todos prontos, Paulo começa a criar as views com os forms
+
+[Igor] incrementar o visual das telas
+
+Banco de dados mudado para MySQL 8.0.17 (O mais atual)
+
+
+01 de setembro de 2019
+Problemas: Mysql, mudar banco de dados para o padrão SQLite 3.26, pela falta de tempo
+
+Todos os CRUDs consertados, exceto disciplina e matrícula
+
+
+
+02 de setembro de 2019
+
+CRUDs de disciplina e matrículas consertados
+
+Parte visual das páginas foi melhorada
