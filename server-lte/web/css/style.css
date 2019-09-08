@@ -1,0 +1,48 @@
+* {
+	font-family: monospace;
+}
+body {
+	--leftbar-width: 200px;
+}
+#leftbar, #workspace {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+}
+#leftbar {
+	left: 0px;
+	width: var(--leftbar-width);
+	background-color: #ddd;
+}
+#workspace {
+	left: var(--leftbar-width);
+	right: 0px;
+}
+.form-page {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	right: 20px;
+	bottom: 20px;
+}
+.form-cell {
+	margin: 5px;
+}
+.menu-option {
+	margin: 5px;
+	padding: 5px;
+	background-color: #444;
+	color: #fff;
+	cursor: pointer;
+}
+.form-cell input[type="text"] {
+	padding: 3px;
+	border: 1px solid #ccc;
+	width: 300px;
+}
+td, th {
+	padding: 5px;
+}
+table {
+	border-collapse: collapse;
+}
