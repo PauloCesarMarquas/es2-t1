@@ -8,7 +8,7 @@ PageControl.addFormInit('aluno/add', (page, data, loaded) => {
 		const data = Util.getFormData(page);
 		PageControl.userPost('/aluno/add', data)
 			.then(id => {
-				PageControl.say('Cadastro concluido');
+				PageControl.say('Cadastro concluído');
 			})
 			.catch(err => {
 				PageControl.warn('Erro ao cadastrar');

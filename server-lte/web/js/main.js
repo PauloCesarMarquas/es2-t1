@@ -23,4 +23,3 @@ PageControl.addMenuOption({
 $(document).ready(() => {
 	PageControl.init();
 });
-alert('maçã');

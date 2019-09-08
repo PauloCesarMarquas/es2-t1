@@ -45,7 +45,7 @@ def handleRequest(req, type):
 	path = './web' + path
 
 	try:
-		msg = open(path, 'r', 'utf-8').read()
+		msg = open(path, 'r', encoding='utf-8').read()
 		file_read = True
 	except:
 		file_read = False
