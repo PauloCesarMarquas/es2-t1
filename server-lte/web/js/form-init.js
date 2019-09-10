@@ -16,7 +16,6 @@ PageControl.addFormInit('aluno/add', (page, data, loaded) => {
 	});
 	loaded();
 });
-
 PageControl.addFormInit('aluno/list', (page, data, loaded) => {
 	PageControl.userGet('/aluno/list')
 		.then(array => {
@@ -31,6 +30,42 @@ PageControl.addFormInit('aluno/list', (page, data, loaded) => {
 				addAttr(item.matricula);
 				addAttr(item.telefone);
 				addAttr(item.email);
+			});
+			loaded();
+		})
+		.catch(err => {
+			PageControl.closeForm(page);
+			PageControl.warn('Erro interno');
+			loaded();
+		})
+});
+
+PageControl.addFormInit('curso/add', (page, data, loaded) => {
+	const button = page.find('[target="add-curso"]');
+	page.find('input[type="text"]').first().focus();
+	button.bind('click', () => {
+		const data = Util.getFormData(page);
+		PageControl.userPost('/curso/add', data)
+			.then(id => {
+				PageControl.say('Cadastro concluído');
+			})
+			.catch(err => {
+				PageControl.warn('Erro ao cadastrar');
+			});
+	});
+	loaded();
+});
+PageControl.addFormInit('curso/list', (page, data, loaded) => {
+	PageControl.userGet('/curso/list')
+		.then(array => {
+			const table = page.find('table');
+			array.forEach(item => {
+				const tr = $.new('tr');
+				const addAttr = attr => {
+					tr.append($.new('td').append($.txt(attr)));
+				}
+				table.append(tr);
+				addAttr(item.nome);
 			});
 			loaded();
 		})

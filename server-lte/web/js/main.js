@@ -20,6 +20,26 @@ PageControl.addMenuOption({
 		PageControl.openForm('aluno/list');
 	}
 });
+PageControl.addMenuOption({
+	id: 'cursos',
+	title: 'Cursos'
+});
+PageControl.addMenuOption({
+	id: 'add-curso',
+	parent_id: 'cursos',
+	title: 'Cadastrar curso',
+	action: () => {
+		PageControl.openForm('curso/add');
+	}
+});
+PageControl.addMenuOption({
+	id: 'list-curso',
+	parent_id: 'cursos',
+	title: 'Listar cursos',
+	action: () => {
+		PageControl.openForm('curso/list');
+	}
+});
 $(document).ready(() => {
 	PageControl.init();
 });
