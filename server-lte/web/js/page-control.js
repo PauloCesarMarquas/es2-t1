@@ -58,13 +58,13 @@ const menuOptionToDOM = option => {
 };
 const gobackOptionToDOM = () => {
 	return $.new(`div#goback.menu-option`)
-		.append($.txt('Voltar'))
+		.append($.txt('<< Voltar'));
 };
 
 const openMenuOption = option => {
-	menuStruct.current = option;
 	const { children, action } = option;
 	if (children.length) {
+		menuStruct.current = option;
 		const leftbar = $('#leftbar').html('');
 		if (option.parent) {
 			leftbar.append(gobackOptionToDOM());

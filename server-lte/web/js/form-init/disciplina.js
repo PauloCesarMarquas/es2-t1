@@ -45,9 +45,15 @@ PageControl.addFormInit('disciplina/list', (page, data, loaded) => {
 				const addAttr = attr => {
 					tr.append($.new('td').append($.txt(attr)));
 				}
+				const addButton = (value, target) => {
+					const button = $.new(`input[type="button"][target="${ target }"]`).val(value);
+					tr.append($.new('td').append(button));
+				};
 				table.append(tr);
 				addAttr(item.nome);
 				addAttr(item.nomeCurso);
+				addButton('Editar', 'edit-disciplina');
+				addButton('Remover', 'remove-disciplina');
 			});
 			loaded();
 		})
