@@ -101,11 +101,30 @@ export const init = () => {
 };
 
 let counter = 0;
+let loading = null;
 export const ocupy = () => {
-	console.log('Perae', ++counter);
+	if (++counter === 1) {
+		loading = $.new('div').css({
+			position: 'fixed',
+			zIndex: '9999',
+			top: '0px',
+			left: '0px',
+			right: '0px',
+			bottom: '0px',
+			backgroundColor: 'rgba(32, 32, 32, 0.75)',
+			paddingTop: '100px',
+			textAlign: 'center',
+			color: '#fff',
+			fontSize: '26px'
+		}).html($.txt('Aguarde...'));
+		$('body').append(loading);
+	}
 };
 export const free = () => {
-	console.log('Pronto', counter--);
+	if (--counter === 0) {
+		loading.remove();
+		loading = null;
+	}
 };
 
 export const userReq = (type, url, data) => new Promise((done, fail) => {
