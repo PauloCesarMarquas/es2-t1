@@ -23,11 +23,23 @@ const loadList = page => new Promise((done, fail) => {
 				};
 				table.append(tr);
 				addAttr(item.nome);
-				addAttr(item.matricula);
-				addAttr(item.telefone);
-				addAttr(item.email);
+				addAttr(item.nomeCurso);
 				addButton('Editar', 'update-aluno');
 				addButton('Remover', 'remove-aluno');
+			});
+			done();
+		})
+		.catch(fail);
+});
+const loadCursos = page => new Promise((done, fail) => {
+	const select = page.find('select[name="idCurso"]');
+	PageControl.userGet('/curso/list')
+		.then(array => {
+			select.html('');
+			array.forEach(curso => {
+				const option = $.new('option').val(curso.id);
+				option.append($.txt(curso.nome));
+				select.append(option);
 			});
 			done();
 		})
@@ -82,8 +94,11 @@ PageControl.addFormInit('aluno/list', (page, data, loaded) => {
 		});
 });
 PageControl.addFormInit('aluno/update', (page, data, loaded) => {
+	let errorMsg = 'Falha ao carregar dados do aluno';
+	let idCurso = null;
 	PageControl.userGet('/aluno/get', data)
 		.then(aluno => {
+			idCurso = aluno.idCurso;
 			const attrs = 'id,nome,matricula,email,telefone'.split(',');
 			attrs.forEach(attr => {
 				page.find(`[name="${ attr }"]`).val(aluno[attr]);
@@ -102,11 +117,16 @@ PageControl.addFormInit('aluno/update', (page, data, loaded) => {
 						PageControl.warn('Erro ao salvar alterações');
 					});
 			});
+			errorMsg = 'Falha ao carregar cursos';
+			return loadCursos(page);
+		})
+		.then(() => {
+			page.find('[name="idCurso"]').val(idCurso);
 			loaded();
 		})
 		.catch(err => {
 			PageControl.closeForm(page);
-			PageControl.warn('Erro interno');
+			PageControl.warn(errorMsg);
 			loaded();
 		});
 });

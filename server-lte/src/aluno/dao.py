@@ -7,7 +7,6 @@ class DAOAluno:
 		matricula = aluno['matricula']
 		email     = aluno['email']
 		telefone  = aluno['telefone']
-		#idCurso   = aluno['idCurso']
 		query = 'INSERT INTO Aluno '
 		query += '(nome, matricula, email, telefone) '
 		query += 'VALUES (%s, %s, %s, %s)'
@@ -15,8 +14,16 @@ class DAOAluno:
 		return conn.id()
 
 	def list(self, conn):
-		conn.run('SELECT id, nome, matricula, telefone, email FROM Aluno;')
-		return toObjArray(conn.res(), ['id', 'nome', 'matricula', 'telefone', 'email'])
+		conn.run('SELECT\
+			Aluno.id,\
+			Aluno.nome,\
+			Aluno.matricula,\
+			Aluno.telefone,\
+			Aluno.email,\
+			Curso.nome AS nomeCurso\
+			FROM Aluno\
+			LEFT JOIN Curso ON Curso.id = Aluno.idCurso;')
+		return toObjArray(conn.res(), ['id', 'nome', 'matricula', 'telefone', 'email', 'nomeCurso'])
 
 	def update(self, conn, aluno):
 		id        = aluno['id']
