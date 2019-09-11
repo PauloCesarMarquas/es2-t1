@@ -2,9 +2,9 @@ from lib.util import toObjArray
 
 class DAODisciplina:
 
-	def add(self, conn, curso):
-		nome = curso['nome']
-		idCurso = curso['idCurso']
+	def add(self, conn, disciplina):
+		nome = disciplina['nome']
+		idCurso = disciplina['idCurso']
 		query = 'INSERT INTO Disciplina (nome, idCurso) VALUES (%s, %s);'
 		conn.run(query, (nome, int(idCurso)))
 		conn.done()

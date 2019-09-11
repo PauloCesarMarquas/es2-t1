@@ -12,3 +12,6 @@ class DAOCurso:
 	def list(self, conn):
 		conn.run('SELECT id, nome FROM Curso;')
 		return toObjArray(conn.res(), ['id', 'nome'])
+
+
+		
