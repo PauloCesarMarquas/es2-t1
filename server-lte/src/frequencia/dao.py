@@ -9,7 +9,6 @@ class DAOFrequencia:
 		idAluno		= frequencia['idAluno']
 		query = 'INSERT INTO Frequencia (data) VALUES (%s);'
 		conn.run(query, (aluno, data, presenca, int(idAluno)))
-		conn.done()
 		return conn.id()
 
 	def list(self, conn):
@@ -23,6 +22,3 @@ class DAOFrequencia:
 			FROM Frequencia\
 			INNER JOIN Aluno ON Aluno.id = Frequencia.idAluno;');
 		return toObjArray(conn.res(), ['id', 'nomeAluno', 'data', 'presenca','idAluno'])
-
-
-		

@@ -7,7 +7,6 @@ class DAODisciplina:
 		idCurso = disciplina['idCurso']
 		query = 'INSERT INTO Disciplina (nome, idCurso) VALUES (%s, %s);'
 		conn.run(query, (nome, int(idCurso)))
-		conn.done()
 		return conn.id()
 
 	def list(self, conn):

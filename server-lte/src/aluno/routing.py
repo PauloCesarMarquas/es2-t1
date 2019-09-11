@@ -9,14 +9,35 @@ def add(req, data):
 		'email': data['email'][0],
 		'telefone': data['telefone'][0]
 	}
-	conn = Connector()
-	dao = DAOAluno()
-	req.sendJSON(dao.add(conn, aluno))
+	req.sendJSON(DAOAluno().add(Connector(), aluno))
+add_POST('/aluno/add', add)
 
 def list(req, data):
-	conn = Connector()
-	dao = DAOAluno()
-	req.sendJSON(dao.list(conn))
-
-add_POST('/aluno/add', add)
+	req.sendJSON(DAOAluno().list(Connector()))
 add_GET('/aluno/list', list)
+
+def get(req, data):
+	id = data['id'][0]
+	req.sendJSON(DAOAluno().get(Connector(), id))
+add_GET('/aluno/get', get)
+
+def update(req, data):
+	aluno = {
+		'id': data['id'][0],
+		'nome': data['nome'][0],
+		'matricula': data['matricula'][0],
+		'email': data['email'][0],
+		'telefone': data['telefone'][0],
+	}
+	if 'idCurso' in data:
+		aluno['idCurso'] = data['idCurso'][0]
+	else:
+		aluno['idCurso'] = None
+	DAOAluno().update(Connector(), aluno)
+	req.sendJSON(True)
+add_POST('/aluno/update', update)
+
+def remove(req, data):
+	id = data['id'][0]
+	req.sendJSON(DAOAluno().remove(Connector(), id))
+add_POST('/aluno/remove', remove)

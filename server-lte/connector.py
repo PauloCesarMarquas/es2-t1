@@ -8,23 +8,29 @@ class Connector:
 			password = "admin123",
 			db = "mydb"
 		)
-		cursor = db.cursor()
 		self.db = db
-		self.cursor = cursor
+		self.cursor = db.cursor()
+		self.open = True
 
 	def run(self, query, data=tuple()):
 		self.cursor.execute(query, data)
+		return self
 
 	def res(self):
 		return self.cursor.fetchall()
 
 	def id(self):
 		return self.cursor.lastrowid
-	
-	def done(self):
+
+	def flush(self):
 		self.db.commit()
-		self.db.close()
+
+	def close(self):
+		if (self.open == True):
+			self.flush()
+			self.db.close()
+			self.open = False
 		return self
 
 	def __del__(self):
-		self.done()
+		self.close()
