@@ -9,3 +9,6 @@ import '/js/menu/disciplina.js';
 
 import '/js/form-init/matricula.js';
 import '/js/menu/matricula.js';
+
+import '/js/form-init/turma.js';
+import '/js/menu/turma.js';

@@ -2,7 +2,6 @@ from lib.util import toObjArray
 
 class DAOnota:
 
-
 	def add(self, conn, aluno, disciplina):
 		aluno      	= aluno['aluno']
 		idAluno		= aluno['idAluno']
