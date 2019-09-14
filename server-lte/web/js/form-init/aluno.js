@@ -1,20 +1,30 @@
 import * as System from '/js/system.js';
 
+// Foca a primeira input text da página de formulário
 const focusFirst = page => {
 	page.find('input[type="text"]').first().focus();
 };
+
+// Atualiza a tabela de listagem de alunos
 const loadList = page => new Promise((done, fail) => {
 	const table = page.find('table');
+
+	// Remove todas as linhas da tabela com exceção da primeira
+	// pois contém os títulos dos atributos
 	table.find('tr').not(':eq(0)').remove();
+
 	page.userGet('/aluno/list')
 		.then(array => {
 			array.forEach(item => {
-				const {id} = item;
 				const tr = $.new('tr');
-				tr.append($.new('input[type="hidden"][name="id"]').val(id));
+				tr.append($.new('input[type="hidden"][name="id"]').val(item.id));
+
+				// Adiciona um valor de atributo à linha atual
 				const addAttr = attr => {
 					tr.append($.new('td').append($.txt(attr)));
 				};
+
+				// Adiciona um botão à linha atual
 				const addButton = (value, target) => {
 					const button = $.new('input').attr({
 						type: 'button',
@@ -22,16 +32,19 @@ const loadList = page => new Promise((done, fail) => {
 					}).val(value);
 					tr.append($.new('td').append(button));
 				};
-				table.append(tr);
+
 				addAttr(item.nome);
 				addAttr(item.nomeCurso);
 				addButton('Editar', 'update');
 				addButton('Remover', 'remove');
+				table.append(tr);
 			});
 			done();
 		})
 		.catch(fail);
 });
+
+// 
 const loadCursos = page => new Promise((done, fail) => {
 	const select = page.find('select[name="idCurso"]');
 	page.userGet('/curso/list')
