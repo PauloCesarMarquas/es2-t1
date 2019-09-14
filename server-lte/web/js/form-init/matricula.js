@@ -2,7 +2,7 @@ import * as System from '/js/system.js';
 
 const loadAlunoList = page => new Promise((done, fail) => {
 	const select = page.find('[name="idAluno"]')
-	System.userGet('/aluno/list')
+	page.userGet('/aluno/list')
 		.then(array => {
 			select.html('');
 			array.forEach(aluno => {
@@ -18,7 +18,7 @@ const loadAlunoList = page => new Promise((done, fail) => {
 });
 const loadDisciplinaList = page => new Promise((done, fail) => {
 	const select = page.find('[name="idDisciplina"]')
-	System.userGet('/disciplina/list')
+	page.userGet('/disciplina/list')
 		.then(array => {
 			select.html('');
 			array.forEach(disciplina => {
@@ -34,7 +34,7 @@ const loadDisciplinaList = page => new Promise((done, fail) => {
 });
 const loadList = page => new Promise((done, fail) => {
 	const table = page.find('table');
-	System.userGet('/matricula/list')
+	page.userGet('/matricula/list')
 		.then(array => {
 			table.find('tr').not(':eq(0)').remove();
 			array.forEach(item => {
@@ -57,52 +57,46 @@ const loadList = page => new Promise((done, fail) => {
 		})
 		.catch(fail);
 });
-System.addFormInit('matricula/add', (page, data, loaded) => {
+System.addFormInit('matricula/add', (page, data) => {
 	let error = 'Erro ao carregar alunos';
 	loadAlunoList(page)
 		.then(res => {
 			error = 'Erro ao carregar disciplinas';
 			return loadDisciplinaList(page);
 		})
-		.then(res => {
-			loaded();
-		})
 		.catch(err => {
-			System.closeForm(page);
-			System.warn(error);
-			loaded();
+			page.close();
+			System.error(error);
 		});
 	page.find('[target="submit"]').bind('click', () => {
-		const data = Util.getFormData(page);
-		System.userPost('/matricula/add', data)
+		const data = page.data();
+		page.userPost('/matricula/add', data)
 			.then(res => {
 				System.say('Matrícula registrada com sucesso');
 			})
 			.catch(err => {
-				System.warn('Erro ao cadastrar matrícula');
+				System.error('Erro ao cadastrar matrícula');
 			});
 	});
 });
-System.addFormInit('matricula/list', (page, data, loaded) => {
+System.addFormInit('matricula/list', (page, data) => {
 	loadList(page)
 	 	.then(() => {
-	 		loaded();
 	 	})
 	 	.catch(err => {
-	 		System.warn('Erro ao carregar lista');
-	 		loaded();
+	 		System.error('Erro ao carregar lista');
 	 	});
 	page.on('click', '[target="remove"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
 		let error = 'Erro ao remover matrícula';
-		System.userPost('/matricula/remove', {id})
+		page.userPost('/matricula/remove', {id})
 			.then(res => {
 				error = 'Erro ao recarregar lista de matrículas';
 				System.say('Matrícula removida');
 				return loadList(page);
 			})
 			.catch(err => {
-				System.warn(error);
+				System.error(error);
 			});
 	});
 });
