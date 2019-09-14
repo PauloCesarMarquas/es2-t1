@@ -9,7 +9,60 @@ export const addFormInit = (path, init) => {
 	formInitMap[path] = init;
 };
 
-export const openForm = (path, data) => new Promise((done, fail) => $.ajax({
+class FormPageController {
+	constructor(page) {
+		this.page = page;
+	}
+	lock() {
+		ocupy();
+		return this;
+	}
+	unlock() {
+		free();
+		return this;
+	}
+	userGet(url, data) {
+		return userGet(url, data);
+	}
+	userPost(url, data) {
+		return userPost(url, data);
+	}
+	find(selector) {
+		return this.page.find(selector);
+	}
+	on(event, selector, handler) {
+		this.page.on(event, selector, handler);
+		return this;
+	}
+	data() {
+		const data = {};
+		this.page.find("[name]").each((i, e) => {
+			const obj = $(e);
+			const name = obj.attr('name');
+			const value = obj.val();
+			data[name] = value;
+		});
+		return data;
+	}
+	close() {
+		closeForm(this.page);
+		return this;
+	}
+	say(msg) {
+		say(msg);
+		return this;
+	}
+	warn(msg) {
+		warn(msg);
+		return this;
+	}
+	error(msg) {
+		error(msg);
+		return this;
+	}
+}
+
+export const openFormPage = (path, data) => new Promise((done, fail) => $.ajax({
 	type: 'GET',
 	url: '/forms/' + path + '.html',
 	success: html => {
@@ -17,8 +70,7 @@ export const openForm = (path, data) => new Promise((done, fail) => $.ajax({
 		const page = $.new('div.form-page').html(html);
 		$('#workspace').html('').append(page);
 		if (init) {
-			ocupy();
-			init(page, data, free);
+			init(new FormPageController(page), data);
 		}
 		done();
 	},
@@ -27,15 +79,13 @@ export const openForm = (path, data) => new Promise((done, fail) => $.ajax({
 	}
 }));
 
-export const closeForm = page => new Promise(done => {
+const closeForm = page => new Promise(done => {
 	if (!page.is('.form-page')) {
 		page = page.closest('.form-page');
 	}
 	page.remove();
 	done();
 });
-
-window.menuStruct = menuStruct;
 
 export const addMenuOption = option => {
 	const { root, idMap } = menuStruct;
@@ -102,7 +152,7 @@ export const init = () => {
 
 let counter = 0;
 let loading = null;
-export const ocupy = () => {
+const ocupy = () => {
 	if (++counter === 1) {
 		loading = $.new('div').css({
 			position: 'fixed',
@@ -120,14 +170,14 @@ export const ocupy = () => {
 		$('body').append(loading);
 	}
 };
-export const free = () => {
+const free = () => {
 	if (--counter === 0) {
 		loading.remove();
 		loading = null;
 	}
 };
 
-export const userReq = (type, url, data) => new Promise((done, fail) => {
+const userReq = (type, url, data) => new Promise((done, fail) => {
 	ocupy();
 	$.ajax({
 		url, type, data,
@@ -142,12 +192,15 @@ export const userReq = (type, url, data) => new Promise((done, fail) => {
 	})
 });
 
-export const userGet = (url, data) => userReq('GET', url, data);
-export const userPost = (url, data) => userReq('POST', url, data);
+const userGet = (url, data) => userReq('GET', url, data);
+const userPost = (url, data) => userReq('POST', url, data);
 
 export const say = msg => {
 	alert('[Mensagem do sistema]\n' + msg);
 };
 export const warn = msg => {
+	alert('[Aviso do sistema]\n' + msg);
+};
+export const error = msg => {
 	alert('[Erro do sistema]\n' + msg);
 };

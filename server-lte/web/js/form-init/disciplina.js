@@ -1,9 +1,8 @@
-import * as PageControl from '/js/page-control.js';
-import * as Util from '/js/util.js';
+import * as System from '/js/system.js';
 
 const loadCursos = page => new Promise((done, fail) => {
 	const select = page.find('select[name="idCurso"]');
-	PageControl.userGet('/curso/list')
+	System.userGet('/curso/list')
 		.then(array => {
 			select.html('');
 			array.forEach(curso => {
@@ -18,7 +17,7 @@ const loadCursos = page => new Promise((done, fail) => {
 const loadList = page => new Promise((done, fail) => {
 	const table = page.find('table');
 	table.find('tr').not(':eq(0)').remove();
-	PageControl.userGet('/disciplina/list')
+	System.userGet('/disciplina/list')
 		.then(array => {
 			array.forEach(item => {
 				const {id} = item;
@@ -41,43 +40,43 @@ const loadList = page => new Promise((done, fail) => {
 		})
 		.catch(fail)
 });
-PageControl.addFormInit('disciplina/add', (page, data, loaded) => {
+System.addFormInit('disciplina/add', (page, data, loaded) => {
 	const button = page.find('[target="add-disciplina"]');
 	page.find('input[type="text"]').first().focus();
 	button.bind('click', () => {
 		const data = Util.getFormData(page);
-		PageControl.userPost('/disciplina/add', data)
+		System.userPost('/disciplina/add', data)
 			.then(id => {
-				PageControl.say('Cadastro concluído');
+				System.say('Cadastro concluído');
 			})
 			.catch(err => {
-				PageControl.warn('Erro ao cadastrar');
+				System.warn('Erro ao cadastrar');
 			});
 	});
 	loadCursos(page)
 		.then(loaded)
 		.catch(err => {
-			PageControl.closeForm(page);
-			PageControl.warn('Erro interno');
+			System.closeForm(page);
+			System.warn('Erro interno');
 			loaded();
 		});
 });
-PageControl.addFormInit('disciplina/update', (page, data, loaded) => {
+System.addFormInit('disciplina/update', (page, data, loaded) => {
 	page.find('[target="submit"]').bind('click', () => {
-		PageControl.ocupy();
-		PageControl.userPost('/disciplina/update', Util.getFormData(page))
+		System.ocupy();
+		System.userPost('/disciplina/update', Util.getFormData(page))
 			.then(res => {
-				PageControl.free();
-				PageControl.say('Alterações salvas');
+				System.free();
+				System.say('Alterações salvas');
 			})
 			.catch(err => {
-				PageControl.free();
-				PageControl.warn('Erro ao salvar alterações');
+				System.free();
+				System.warn('Erro ao salvar alterações');
 			});
 	});
 	let idCurso = null;
 	let errorMsg = 'Falha ao carregar disciplina';
-	PageControl.userGet('/disciplina/get', data)
+	System.userGet('/disciplina/get', data)
 		.then(disciplina => {
 			idCurso = disciplina.idCurso;
 			errorMsg = 'Erro ao carregar cursos';
@@ -90,37 +89,37 @@ PageControl.addFormInit('disciplina/update', (page, data, loaded) => {
 			loaded();
 		})
 		.catch(err => {
-			PageControl.closeForm(page);
-			PageControl.warn(errorMsg);
+			System.closeForm(page);
+			System.warn(errorMsg);
 			loaded();
 		});
 });
-PageControl.addFormInit('disciplina/list', (page, data, loaded) => {
+System.addFormInit('disciplina/list', (page, data, loaded) => {
 	page.on('click', '[target="update"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
-		PageControl.openForm('disciplina/update', {id});
+		System.openForm('disciplina/update', {id});
 	});
 	page.on('click', '[target="remove"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
 		let errorMsg = 'Falha ao remover disciplina';
-		PageControl.ocupy();
-		PageControl.userPost('/disciplina/remove', {id})
+		System.ocupy();
+		System.userPost('/disciplina/remove', {id})
 			.then(() => {
-				PageControl.say('Disciplina removida');
+				System.say('Disciplina removida');
 				errorMsg = 'Falha ao atualizar lista';
 				return loadList(page);
 			})
-			.then(() => PageControl.free())
+			.then(() => System.free())
 			.catch(() => {
-				PageControl.warn(errorMsg);
-				PageControl.free();
+				System.warn(errorMsg);
+				System.free();
 			});
 	});
 	loadList(page)
 		.then(loaded)
 		.catch(err => {
-			PageControl.closeForm(page);
-			PageControl.warn('Erro ao carregar a lista');
+			System.closeForm(page);
+			System.warn('Erro ao carregar a lista');
 			loaded();
 		});
 });

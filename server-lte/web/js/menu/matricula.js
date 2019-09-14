@@ -1,22 +1,22 @@
-import * as PageControl from '/js/page-control.js';
+import * as System from '/js/system.js';
 
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'matriculas',
 	title: 'Matrículas'
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'add-matricula',
 	parent_id: 'matriculas',
 	title: 'Matricular Aluno',
 	action: () => {
-		PageControl.openForm('matricula/add');
+		System.openFormPage('matricula/add');
 	}
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'list-matricula',
 	parent_id: 'matriculas',
 	title: 'Listar Matriculas',
 	action: () => {
-		PageControl.openForm('matricula/list');
+		System.openFormPage('matricula/list');
 	}
 });

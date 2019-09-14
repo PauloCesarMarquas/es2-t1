@@ -1,12 +1,11 @@
-import * as PageControl from '/js/page-control.js';
-import * as Util from '/js/util.js';
+import * as System from '/js/system.js';
 
 const focusFirst = page => {
 	page.find('input[type="text"]').first().focus();
 };
 const loadList = page => new Promise((done, fail) => {
 	const table = page.find('table');
-	PageControl.userGet('/curso/list')
+	page.userGet('/curso/list')
 		.then(array => {
 			table.find('tr').not(':eq(0)').remove();
 			array.forEach(item => {
@@ -30,70 +29,66 @@ const loadList = page => new Promise((done, fail) => {
 		})
 		.catch(fail);
 });
-PageControl.addFormInit('curso/add', (page, data, loaded) => {
-	const button = page.find('[target="add-curso"]');
+System.addFormInit('curso/add', (page, data) => {
+	const button = page.find('[target="submit"]');
 	focusFirst(page);
 	button.bind('click', () => {
-		const data = Util.getFormData(page);
-		PageControl.userPost('/curso/add', data)
+		const data = page.data();
+		page.userPost('/curso/add', data)
 			.then(id => {
-				PageControl.say('Cadastro concluído');
+				System.say('Cadastro concluído');
 			})
 			.catch(err => {
-				PageControl.warn('Erro ao cadastrar');
+				System.error('Erro ao cadastrar');
 			});
 	});
-	loaded();
 });
-PageControl.addFormInit('curso/list', (page, data, loaded) => {
+System.addFormInit('curso/list', (page, data) => {
 	loadList(page)
-		.then(loaded)
 		.catch(err => {
-			PageControl.closeForm(page);
-			PageControl.warn('Erro ao carregar lista');
-			loaded();
+			console.log(err);
+			page.close();
+			System.error('Erro ao carregar lista');
 		});
 	page.on('click', '[target="update"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
-		PageControl.openForm('curso/update', {id});
+		System.openFormPage('curso/update', {id});
 	});
 	page.on('click', '[target="remove"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
 		let errorMsg = 'Erro ao remover curso';
-		PageControl.userPost('/curso/remove', {id})
+		page.userPost('/curso/remove', {id})
 			.then(res => {
-				PageControl.say('Curso removido');
+				System.say('Curso removido');
 				errorMsg = 'Falha ao recarregar lista';
 				return loadList(page);
 			})
 			.catch(err => {
-				PageControl.warn(errorMsg);
+				System.error(errorMsg);
 			});
 	});
 });
-PageControl.addFormInit('curso/update', (page, data, loaded) => {
-	PageControl.userGet('/curso/get', data)
+System.addFormInit('curso/update', (page, data) => {
+	page.userGet('/curso/get', data)
 		.then(curso => {
 			let attrs = 'id,nome'.split(',');
 			attrs.forEach(attr => {
 				page.find(`[name="${attr}"]`).val(curso[attr]);
 			});
 			focusFirst(page);
-			loaded();
 		})
 		.catch(err => {
-			PageControl.closeForm(page);
-			PageControl.warn('Erro interno');
-			loaded();
+			page.close();
+			System.error('Erro interno');
 		});
 	page.on('click', '[target="submit"]', () => {
-		const data = Util.getFormData(page);
-		PageControl.userPost('/curso/update', data)
+		const data = page.data();
+		page.userPost('/curso/update', data)
 			.then(res => {
-				PageControl.say('Alterações salvas');
+				System.say('Alterações salvas');
 			})
 			.catch(err => {
-				PageControl.warn('Erro ao salvar alterações');
+				System.error('Erro ao salvar alterações');
 			});
 	});
 });

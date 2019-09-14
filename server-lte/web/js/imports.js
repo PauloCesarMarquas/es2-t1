@@ -9,6 +9,3 @@ import '/js/menu/disciplina.js';
 
 import '/js/form-init/matricula.js';
 import '/js/menu/matricula.js';
-
-import '/js/form-init/notas.js';
-import '/js/menu/notas.js';

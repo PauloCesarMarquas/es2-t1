@@ -1,22 +1,22 @@
-import * as PageControl from '/js/page-control.js';
+import * as System from '/js/system.js';
 
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'alunos',
 	title: 'Alunos'
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'add-aluno',
 	parent_id: 'alunos',
 	title: 'Cadastrar aluno',
 	action: () => {
-		PageControl.openForm('aluno/add');
+		System.openFormPage('aluno/add');
 	}
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'list-aluno',
 	parent_id: 'alunos',
 	title: 'Listar alunos',
 	action: () => {
-		PageControl.openForm('aluno/list');
+		System.openFormPage('aluno/list');
 	}
 });

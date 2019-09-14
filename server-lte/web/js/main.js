@@ -1,6 +1,6 @@
-import * as PageControl from '/js/page-control.js';
+import * as System from '/js/system.js';
 import '/js/imports.js';
 
 $(document).ready(() => {
-	PageControl.init();
+	System.init();
 });

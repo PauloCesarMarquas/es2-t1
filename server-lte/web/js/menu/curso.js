@@ -1,22 +1,22 @@
-import * as PageControl from '/js/page-control.js';
+import * as System from '/js/system.js';
 
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'cursos',
 	title: 'Cursos'
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'add-curso',
 	parent_id: 'cursos',
 	title: 'Cadastrar curso',
 	action: () => {
-		PageControl.openForm('curso/add');
+		System.openFormPage('curso/add');
 	}
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'list-curso',
 	parent_id: 'cursos',
 	title: 'Listar cursos',
 	action: () => {
-		PageControl.openForm('curso/list');
+		System.openFormPage('curso/list');
 	}
 });

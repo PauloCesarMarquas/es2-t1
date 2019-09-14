@@ -1,5 +1,4 @@
-import * as PageControl from '/js/page-control.js';
-import * as Util from '/js/util.js';
+import * as System from '/js/system.js';
 
 const focusFirst = page => {
 	page.find('input[type="text"]').first().focus();
@@ -7,7 +6,7 @@ const focusFirst = page => {
 const loadList = page => new Promise((done, fail) => {
 	const table = page.find('table');
 	table.find('tr').not(':eq(0)').remove();
-	PageControl.userGet('/aluno/list')
+	page.userGet('/aluno/list')
 		.then(array => {
 			array.forEach(item => {
 				const {id} = item;
@@ -17,15 +16,17 @@ const loadList = page => new Promise((done, fail) => {
 					tr.append($.new('td').append($.txt(attr)));
 				};
 				const addButton = (value, target) => {
-					const button = $.new(`input[type="button"][target="${ target }"]`).val(value);
-					button.attr('ref-id', id);
+					const button = $.new('input').attr({
+						type: 'button',
+						target
+					}).val(value);
 					tr.append($.new('td').append(button));
 				};
 				table.append(tr);
 				addAttr(item.nome);
 				addAttr(item.nomeCurso);
-				addButton('Editar', 'update-aluno');
-				addButton('Remover', 'remove-aluno');
+				addButton('Editar', 'update');
+				addButton('Remover', 'remove');
 			});
 			done();
 		})
@@ -33,70 +34,63 @@ const loadList = page => new Promise((done, fail) => {
 });
 const loadCursos = page => new Promise((done, fail) => {
 	const select = page.find('select[name="idCurso"]');
-	PageControl.userGet('/curso/list')
+	page.userGet('/curso/list')
 		.then(array => {
 			select.html('');
 			array.forEach(curso => {
 				const option = $.new('option').val(curso.id);
-				option.append($.txt(curso.nome));
-				select.append(option);
+				select.append(option.append($.txt(curso.nome)));
 			});
 			done();
 		})
 		.catch(fail);
 });
-PageControl.addFormInit('aluno/add', (page, data, loaded) => {
-	const button = page.find('[target="add-aluno"]');
+
+System.addFormInit('aluno/add', (page, data) => {
+	const button = page.find('[target="submit"]');
 	focusFirst(page);
 	button.bind('click', () => {
-		const data = Util.getFormData(page);
-		PageControl.userPost('/aluno/add', data)
+		const data = page.data();
+		page.userPost('/aluno/add', data)
 			.then(id => {
-				PageControl.say('Cadastro concluído');
+				page.say('Cadastro concluído');
 			})
 			.catch(err => {
-				PageControl.warn('Erro ao cadastrar');
+				page.error('Erro ao cadastrar aluno');
 			});
 	});
-	loaded();
 });
-PageControl.addFormInit('aluno/list', (page, data, loaded) => {
-	page.on('click', '[target="update-aluno"]', function(){
+
+System.addFormInit('aluno/list', (page, data) => {
+	page.on('click', '[target="update"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
-		PageControl.closeForm(page);
-		PageControl.openForm('aluno/update', {id});
+		page.close();
+		System.openFormPage('aluno/update', {id});
 	});
-	page.on('click', '[target="remove-aluno"]', function(){
+	page.on('click', '[target="remove"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
-		let errorMsg = 'Erro ao remover aluno';
-		PageControl.ocupy();
-		PageControl.userPost('/aluno/remove', {id})
+		let error = 'Erro ao remover aluno';
+		page.userPost('/aluno/remove', {id})
 			.then(res => {
-				PageControl.say('Aluno removido');
-				errorMsg = 'Erro ao atualizar lista';
+				System.say('Aluno removido');
+				error = 'Erro ao atualizar lista';
 				return loadList(page);
 			})
-			.then(() => {
-				PageControl.free();
-			})
 			.catch(err => {
-				PageControl.warn(errorMsg);
-				PageControl.free();
+				System.error(error);
 			});
 	});
 	loadList(page)
-		.then(loaded)
 		.catch(err => {
-			PageControl.closeForm(page);
-			PageControl.warn('Erro interno');
-			console.log(err);
-			loaded();
+			page.close();
+			System.error('Erro interno');
 		});
 });
-PageControl.addFormInit('aluno/update', (page, data, loaded) => {
-	let errorMsg = 'Falha ao carregar dados do aluno';
+
+System.addFormInit('aluno/update', (page, data) => {
+	let error = 'Falha ao carregar dados do aluno';
 	let idCurso = null;
-	PageControl.userGet('/aluno/get', data)
+	page.userGet('/aluno/get', data)
 		.then(aluno => {
 			idCurso = aluno.idCurso;
 			const attrs = 'id,nome,matricula,email,telefone'.split(',');
@@ -105,28 +99,17 @@ PageControl.addFormInit('aluno/update', (page, data, loaded) => {
 			});
 			focusFirst(page);
 			page.find('[target="submit"]').bind('click', () => {
-				const data = Util.getFormData(page);
-				PageControl.ocupy();
-				PageControl.userPost('/aluno/update', data)
-					.then(() => {
-						PageControl.free();
-						PageControl.say('Alterações salvas');
-					})
-					.catch(err => {
-						PageControl.free();
-						PageControl.warn('Erro ao salvar alterações');
-					});
+				const data = page.data();
+				page.userPost('/aluno/update', data)
+					.then(() => System.say('Alterações salvas'))
+					.catch(() => System.error('Erro ao salvar alterações'));
 			});
-			errorMsg = 'Falha ao carregar cursos';
+			error = 'Falha ao carregar cursos';
 			return loadCursos(page);
 		})
-		.then(() => {
-			page.find('[name="idCurso"]').val(idCurso);
-			loaded();
-		})
-		.catch(err => {
-			PageControl.closeForm(page);
-			PageControl.warn(errorMsg);
-			loaded();
+		.then(page.find('[name="idCurso"]').val(idCurso))
+		.catch(() => {
+			page.close();
+			System.error(error);
 		});
 });

@@ -1,22 +1,22 @@
-import * as PageControl from '/js/page-control.js';
+import * as System from '/js/system.js';
 
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'disciplinas',
 	title: 'Disciplinas'
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'add-disciplina',
 	parent_id: 'disciplinas',
 	title: 'Cadastrar disciplina',
 	action: () => {
-		PageControl.openForm('disciplina/add');
+		System.openFormPage('disciplina/add');
 	}
 });
-PageControl.addMenuOption({
+System.addMenuOption({
 	id: 'list-disciplina',
 	parent_id: 'disciplinas',
 	title: 'Listar disciplinas',
 	action: () => {
-		PageControl.openForm('disciplina/list');
+		System.openFormPage('disciplina/list');
 	}
 });
