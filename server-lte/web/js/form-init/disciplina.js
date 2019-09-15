@@ -41,7 +41,22 @@ const loadList = page => new Promise((done, fail) => {
 		})
 		.catch(fail)
 });
-System.addFormInit('disciplina/add', (page, data) => {
+const loadPorCurso = page => new Promise((done, fail) => {
+	const table = page.find('table');
+	table.find('tr').not(':eq(0)').remove();
+	const idCurso = page.find('[name="idCurso"]').val();
+	page.userGet('/disciplina/list', {idCurso})
+		.then(array => {
+			array.forEach(item => {
+				const tr = $.new('tr');
+				tr.append($.new('td').append($.txt(item.nome)));
+				table.append(tr);
+			});
+			done();
+		})
+		.catch(fail);
+});
+System.addFormInit('disciplina/add', page => {
 	const button = page.find('[target="submit"]');
 	page.find('input[type="text"]').first().focus();
 	button.bind('click', () => {
@@ -55,7 +70,7 @@ System.addFormInit('disciplina/add', (page, data) => {
 			System.error('Erro interno');
 		});
 });
-System.addFormInit('disciplina/update', (page, data) => {
+System.addFormInit('disciplina/update', page => {
 	page.find('[target="submit"]').bind('click', () => {
 		page.userPost('/disciplina/update', page.data())
 			.then(() => System.say('Alterações salvas'))
@@ -77,7 +92,7 @@ System.addFormInit('disciplina/update', (page, data) => {
 			System.error(error);
 		});
 });
-System.addFormInit('disciplina/list', (page, data) => {
+System.addFormInit('disciplina/list', page => {
 	page.on('click', '[target="update"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
 		System.openFormPage('disciplina/update', {id});
@@ -98,4 +113,14 @@ System.addFormInit('disciplina/list', (page, data) => {
 			page.close();
 			System.error('Erro ao carregar a lista');
 		});
+});
+System.addFormInit('disciplina/por_curso', page => {
+	loadCursos(page)
+		.catch(() => {
+			page.close();
+			System.error('Erro ao carregar cursos');
+		});
+	page.find('[target="submit"]').bind('click', () => {
+		loadPorCurso(page);
+	});
 });

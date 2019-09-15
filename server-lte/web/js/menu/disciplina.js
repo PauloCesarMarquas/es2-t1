@@ -20,3 +20,11 @@ System.addMenuOption({
 		System.openFormPage('disciplina/list');
 	}
 });
+System.addMenuOption({
+	id: 'list-disciplina-by-curso',
+	parent_id: 'disciplinas',
+	title: 'Listar por Curso',
+	action: () => {
+		System.openFormPage('disciplina/por_curso');
+	}
+});

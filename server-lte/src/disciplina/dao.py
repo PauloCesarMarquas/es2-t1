@@ -41,3 +41,7 @@ class DAODisciplina:
 
 	def remove(self, conn, id):
 		conn.run('DELETE FROM Disciplina WHERE id = %s;', (int(id),));
+
+	def listByCurso(self, conn, idCurso):
+		conn.run('SELECT id, nome FROM Disciplina WHERE idCurso = %s;', (int(idCurso),))
+		return toObjArray(conn.res(), ['id', 'nome'])

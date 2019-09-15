@@ -25,7 +25,12 @@ add_POST('/disciplina/update', update)
 def list(req, data):
 	conn = Connector()
 	dao = DAODisciplina()
-	req.sendJSON(dao.list(conn))
+	idCurso = data.get('idCurso')
+	if (idCurso == None):
+		array = dao.list(conn)
+	else:
+		array = dao.listByCurso(conn, idCurso)
+	req.sendJSON(array)
 add_GET('/disciplina/list', list)
 
 def get(req, data):
