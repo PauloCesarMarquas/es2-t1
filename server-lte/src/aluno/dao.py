@@ -91,3 +91,12 @@ class DAOAluno:
 			(int(idDisciplina),)
 		)
 		return (toObjArray(conn.res(), [ 'nome', 'matricula' ]))
+
+	def listByCurso(self, conn, idCurso):
+		conn.run('SELECT\
+				nome, matricula\
+			FROM Aluno\
+			WHERE Aluno.idCurso = %s;',
+			(int(idCurso),)
+		)
+		return (toObjArray(conn.res(), [ 'nome', 'matricula' ]))

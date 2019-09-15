@@ -28,3 +28,11 @@ System.addMenuOption({
 		System.openFormPage('aluno/por_disciplina');
 	}
 });
+System.addMenuOption({
+	id: 'list-aluno-por-curso',
+	parent_id: 'alunos',
+	title: 'Listar por Curso',
+	action: () => {
+		System.openFormPage('aluno/por_curso');
+	}
+});

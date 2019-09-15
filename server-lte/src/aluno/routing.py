@@ -15,11 +15,14 @@ add_POST('/aluno/add', add)
 def list(req, data):
 	dao = DAOAluno()
 	conn = Connector()
+	idCurso = data.get('idCurso')
 	idDisciplina = data.get('idDisciplina')
-	if (idDisciplina == None):
-		req.sendJSON(dao.list(conn))
-	else:
+	if (idCurso != None):
+		req.sendJSON(dao.listByCurso(conn, idCurso))
+	elif (idDisciplina != None):
 		req.sendJSON(dao.listByDisciplina(conn, idDisciplina))
+	else:
+		req.sendJSON(dao.list(conn))
 add_GET('/aluno/list', list)
 
 def get(req, data):

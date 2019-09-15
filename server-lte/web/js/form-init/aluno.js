@@ -90,6 +90,24 @@ const loadPorDisciplina = page => new Promise((done, fail) => {
 		.catch(fail);
 });
 
+const loadPorCurso = page => new Promise((done, fail) => {
+	const idCurso = page.find('[name="idCurso"]').val();
+	const table = page.find('table');
+	table.find('tr').not(':eq(0)').remove();
+	page.userGet('/aluno/list', {idCurso})
+		.then(array => {
+			array.forEach(item => {
+				const {nome, matricula} = item;
+				const tr = $.new('tr');
+				tr.append($.new('td').append($.txt(nome)))
+				tr.append($.new('td').append($.txt(matricula)));
+				table.append(tr);
+			});
+			done();
+		})
+		.catch(fail);
+});
+
 System.addFormInit('aluno/add', (page, data) => {
 	const button = page.find('[target="submit"]');
 	focusFirst(page);
@@ -162,10 +180,22 @@ System.addFormInit('aluno/por_disciplina', page => {
 	loadDisciplinas(page)
 		.catch(() => {
 			page.close();
-			System.error('Erro ao carregar cursos');
+			System.error('Erro ao carregar disciplinas');
 		});
 	page.find('[target="submit"]').bind('click', () => {
 		loadPorDisciplina(page)
+			.catch(() => System.error('Erro ao gerar relatório'));
+	});
+});
+
+System.addFormInit('aluno/por_curso', page => {
+	loadCursos(page)
+		.catch(() => {
+			page.close();
+			System.error('Erro ao carregar cursos');
+		});
+	page.find('[target="submit"]').bind('click', () => {
+		loadPorCurso(page)
 			.catch(() => System.error('Erro ao gerar relatório'));
 	});
 });
