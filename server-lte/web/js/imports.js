@@ -15,3 +15,7 @@ import '/js/menu/turma.js';
 
 import '/js/form-init/avaliacao.js';
 import '/js/menu/avaliacao.js';
+
+import '/js/form-init/nota.js';
+import '/js/menu/nota.js';
+
