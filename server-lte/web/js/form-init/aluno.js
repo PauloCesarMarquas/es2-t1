@@ -44,7 +44,6 @@ const loadList = page => new Promise((done, fail) => {
 		.catch(fail);
 });
 
-// 
 const loadCursos = page => new Promise((done, fail) => {
 	const select = page.find('select[name="idCurso"]');
 	page.userGet('/curso/list')
@@ -53,6 +52,38 @@ const loadCursos = page => new Promise((done, fail) => {
 			array.forEach(curso => {
 				const option = $.new('option').val(curso.id);
 				select.append(option.append($.txt(curso.nome)));
+			});
+			done();
+		})
+		.catch(fail);
+});
+
+const loadDisciplinas = page => new Promise((done, fail) => {
+	const select = page.find('[name="idDisciplina"]');
+	page.userGet('/disciplina/list')
+		.then(array => {
+			select.html('');
+			array.forEach(disciplina => {
+				const option = $.new('option').val(disciplina.id);
+				select.append(option.append($.txt(disciplina.nome)));
+			});
+			done();
+		})
+		.catch(fail);
+});
+
+const loadPorDisciplina = page => new Promise((done, fail) => {
+	const idDisciplina = page.find('[name="idDisciplina"]').val();
+	const table = page.find('table');
+	table.find('tr').not(':eq(0)').remove();
+	page.userGet('/aluno/list', {idDisciplina})
+		.then(array => {
+			array.forEach(item => {
+				const {nome, matricula} = item;
+				const tr = $.new('tr');
+				tr.append($.new('td').append($.txt(nome)))
+				tr.append($.new('td').append($.txt(matricula)));
+				table.append(tr);
 			});
 			done();
 		})
@@ -125,4 +156,16 @@ System.addFormInit('aluno/update', (page, data) => {
 			page.close();
 			System.error(error);
 		});
+});
+
+System.addFormInit('aluno/por_disciplina', page => {
+	loadDisciplinas(page)
+		.catch(() => {
+			page.close();
+			System.error('Erro ao carregar cursos');
+		});
+	page.find('[target="submit"]').bind('click', () => {
+		loadPorDisciplina(page)
+			.catch(() => System.error('Erro ao gerar relatório'));
+	});
 });

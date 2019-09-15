@@ -23,7 +23,14 @@ class DAOAluno:
 			Curso.nome AS nomeCurso\
 			FROM Aluno\
 			LEFT JOIN Curso ON Curso.id = Aluno.idCurso;')
-		return toObjArray(conn.res(), ['id', 'nome', 'matricula', 'telefone', 'email', 'nomeCurso'])
+		return toObjArray(conn.res(), [
+			'id',
+			'nome',
+			'matricula',
+			'telefone',
+			'email',
+			'nomeCurso'
+		])
 
 	def update(self, conn, aluno):
 		id        = aluno['id']
@@ -39,7 +46,14 @@ class DAOAluno:
 			telefone = %s,\
 			idCurso = %s\
 			WHERE id = %s';
-		conn.run(query, (nome, matricula, email, telefone, int(idCurso), int(id)))
+		conn.run(query, (
+			nome,
+			matricula,
+			email,
+			telefone,
+			int(idCurso),
+			int(id)
+		))
 
 	def remove(self, conn, id):
 		conn.run('DELETE FROM Matricula WHERE idAluno = %s;', (int(id),))
@@ -57,7 +71,8 @@ class DAOAluno:
 			FROM Aluno\
 			LEFT JOIN Curso ON Curso.id = Aluno.idCurso\
 			WHERE Aluno.id = %s;'
-		attrs = [
+		conn.run(query, (int(id),))
+		return toObjArray(conn.res(), [
 			'id',
 			'nome',
 			'matricula',
@@ -65,6 +80,14 @@ class DAOAluno:
 			'telefone',
 			'idCurso',
 			'nomeCurso'
-		]
-		conn.run(query, (int(id),))
-		return toObjArray(conn.res(), attrs)[0]
+		])[0]
+
+	def listByDisciplina(self, conn, idDisciplina):
+		conn.run('SELECT Aluno.nome, Aluno.matricula\
+			FROM Aluno\
+			INNER JOIN Matricula mat ON mat.idAluno = Aluno.id\
+			INNER JOIN Turma ON Turma.id = mat.idTurma\
+			WHERE Turma.idDisciplina = %s;',
+			(int(idDisciplina),)
+		)
+		return (toObjArray(conn.res(), [ 'nome', 'matricula' ]))
