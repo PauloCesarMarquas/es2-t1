@@ -4,8 +4,8 @@ from server import add_POST, add_GET
 
 def add(req, data):
 	disciplina = {
-		'nome': data['nome'][0],
-		'idCurso': data['idCurso'][0]
+		'nome': data.get('nome'),
+		'idCurso': data.get('idCurso')
 	}
 	conn = Connector()
 	dao = DAODisciplina()
@@ -14,9 +14,9 @@ add_POST('/disciplina/add', add)
 
 def update(req, data):
 	disciplina = {
-		'id': data['id'][0],
-		'nome': data['nome'][0],
-		'idCurso': data['idCurso'][0]
+		'id': data.get('id'),
+		'nome': data.get('nome'),
+		'idCurso': data.get('idCurso')
 	}
 	DAODisciplina().update(Connector(), disciplina)
 	req.sendJSON(True)
@@ -29,12 +29,12 @@ def list(req, data):
 add_GET('/disciplina/list', list)
 
 def get(req, data):
-	id = data['id'][0]
+	id = data.get('id')
 	req.sendJSON(DAODisciplina().get(Connector(), id))
 add_GET('/disciplina/get', get)
 
 def remove(req, data):
-	id = data['id'][0]
+	id = data.get('id')
 	DAODisciplina().remove(Connector(), id)
 	req.sendJSON(True)
 add_POST('/disciplina/remove', remove)

@@ -4,8 +4,8 @@ from server import add_POST, add_GET
 
 def add(req, data):
 	matricula = {
-		'idAluno': data['idAluno'][0],
-		'idDisciplina': data['idDisciplina'][0]
+		'idAluno': data.get('idAluno'),
+		'idDisciplina': data.get('idDisciplina')
 	}
 	dao = DAOMatricula()
 	conn = Connector()
@@ -19,7 +19,7 @@ def list(req, data):
 add_GET('/matricula/list', list)
 
 def remove(req, data):
-	id = data['id'][0]
+	id = data.get('id')
 	dao = DAOMatricula()
 	conn = Connector()
 	req.sendJSON(dao.remove(conn, id))

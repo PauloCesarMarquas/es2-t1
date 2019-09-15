@@ -3,7 +3,7 @@ from src.curso.dao import DAOCurso
 from server import add_POST, add_GET
 
 def add(req, data):
-	curso = { 'nome': data['nome'][0] }
+	curso = { 'nome': data.get('nome') }
 	conn = Connector()
 	dao = DAOCurso()
 	req.sendJSON(dao.add(conn, curso))
@@ -16,14 +16,14 @@ def list(req, data):
 add_GET('/curso/list', list)
 
 def get(req, data):
-	id = data['id'][0]
+	id = data.get('id')
 	req.sendJSON(DAOCurso().get(Connector(), id))
 add_GET('/curso/get', get)
 
 def update(req, data):
 	curso = {
-		'id': data['id'][0],
-		'nome': data['nome'][0]
+		'id': data.get('id'),
+		'nome': data.get('nome')
 	}
 	dao = DAOCurso()
 	conn = Connector()
@@ -31,7 +31,7 @@ def update(req, data):
 add_POST('/curso/update', update)
 
 def remove(req, data):
-	id = data['id'][0]
+	id = data.get('id')
 	dao = DAOCurso()
 	conn = Connector()
 	req.sendJSON(dao.remove(conn, id))

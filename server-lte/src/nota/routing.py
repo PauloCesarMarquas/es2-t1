@@ -4,11 +4,11 @@ from server import add_POST, add_GET
 
 def add(req, data):
 	nota = { 
-		'aluno'		:data['nome'][0],
-		'data'		:data['data'][0],
-		'valor'		:data['valor'][0],
-		'disciplina':data['disciplina'][0],
-		'idDisciplina':data['idDisciplina'][0]
+		'aluno'		:data.get('nome'),
+		'data'		:data.get('data'),
+		'valor'		:data.get('valor'),
+		'disciplina':data.get('disciplina'),
+		'idDisciplina':data.get('idDisciplina')
 	}
 	conn = Connector()
 	dao = DAONota()
@@ -21,7 +21,7 @@ def list(req, data):
 
 def listByDisciplina(req, data):
 	disciplina ={
-		idDisciplina = data['idDisciplina'][0]
+		idDisciplina = data.get('idDisciplina')
 	}
 	conn = Connector()
 	dao = DAONota()

@@ -5,6 +5,15 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from lib.urllib.parse import urlparse, parse_qs
 from lib.mime.mimetypes import guess_type
 
+class QueryData():
+	def __init__(self, query):
+		self.data = parse_qs(query)
+	def get(self, name):
+		data = self.data
+		if name in data:
+			return data[name][0]
+		return None
+
 handlers = {}
 def add_GET(path, handler):
 	key = 'GET:' + path
@@ -32,11 +41,11 @@ def handleRequest(req, type):
 	path = parsed.path
 
 	if type == 'GET':
-		data = parse_qs(parsed.query)
+		data = QueryData(parsed.query)
 	if type == 'POST':
 		content_len = int(req.headers.get('Content-Length'))
 		post_body = req.rfile.read(content_len)
-		data = parse_qs(post_body.decode('utf-8'))
+		data = QueryData(post_body.decode('utf-8'))
 
 	if callHandler(type, path, req, data) == True:
 		return
