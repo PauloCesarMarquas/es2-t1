@@ -16,13 +16,13 @@ const loadAlunoList = page => new Promise((done, fail) => {
 		})
 		.catch(fail);
 });
-const loadDisciplinaList = page => new Promise((done, fail) => {
-	const select = page.find('[name="idDisciplina"]')
-	page.userGet('/disciplina/list')
+const loadTurmaList = page => new Promise((done, fail) => {
+	const select = page.find('[name="idTurma"]')
+	page.userGet('/turma/list')
 		.then(array => {
 			select.html('');
-			array.forEach(disciplina => {
-				const { id, nome } = disciplina;
+			array.forEach(turma => {
+				const { id, nome } = turma;
 				const option = $.new('option');
 				option.append($.txt(nome));
 				option.val(id);
@@ -50,6 +50,7 @@ const loadList = page => new Promise((done, fail) => {
 				};
 				addAttr(item.nomeAluno);
 				addAttr(item.nomeDisciplina);
+				addAttr(item.nomeTurma);
 				addButton('Remover', 'remove');
 				table.append(tr);
 			});
@@ -61,8 +62,8 @@ System.addFormInit('matricula/add', (page, data) => {
 	let error = 'Erro ao carregar alunos';
 	loadAlunoList(page)
 		.then(res => {
-			error = 'Erro ao carregar disciplinas';
-			return loadDisciplinaList(page);
+			error = 'Erro ao carregar turmas';
+			return loadTurmaList(page);
 		})
 		.catch(err => {
 			page.close();

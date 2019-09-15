@@ -5,7 +5,7 @@ from server import add_POST, add_GET
 def add(req, data):
 	matricula = {
 		'idAluno': data.get('idAluno'),
-		'idDisciplina': data.get('idDisciplina')
+		'idTurma': data.get('idTurma')
 	}
 	dao = DAOMatricula()
 	conn = Connector()
