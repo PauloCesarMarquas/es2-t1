@@ -1,7 +1,2 @@
-Python 3.5.2
-
-SQLite 3.26
-
-Django 2.2.4
-
-Bootstrap 4.3.1
+Python 3.7.4
+MySQL Ver 8.0.17 for Win64 on x86_64 (MySQL Community Server - GPL)
