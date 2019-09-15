@@ -12,3 +12,6 @@ import '/js/menu/matricula.js';
 
 import '/js/form-init/turma.js';
 import '/js/menu/turma.js';
+
+import '/js/form-init/avaliacao.js';
+import '/js/menu/avaliacao.js';
