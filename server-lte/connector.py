@@ -16,6 +16,10 @@ class Connector:
 		self.cursor.execute(query, data)
 		return self
 
+	def runMany(self, query, array=[]):
+		self.cursor.executemany(query, array)
+		return self
+
 	def res(self):
 		return self.cursor.fetchall()
 

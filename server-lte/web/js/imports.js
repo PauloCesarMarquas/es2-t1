@@ -15,3 +15,6 @@ import '/js/menu/turma.js';
 
 import '/js/form-init/avaliacao.js';
 import '/js/menu/avaliacao.js';
+
+import '/js/form-init/frequencia.js';
+import '/js/menu/frequencia.js';

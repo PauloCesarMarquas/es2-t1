@@ -16,9 +16,12 @@ def list(req, data):
 	dao = DAOAluno()
 	conn = Connector()
 	idCurso = data.get('idCurso')
+	idTurma = data.get('idTurma')
 	idDisciplina = data.get('idDisciplina')
 	if (idCurso != None):
 		req.sendJSON(dao.listByCurso(conn, idCurso))
+	elif (idTurma != None):
+		req.sendJSON(dao.listByTurma(conn, idTurma))
 	elif (idDisciplina != None):
 		req.sendJSON(dao.listByDisciplina(conn, idDisciplina))
 	else:

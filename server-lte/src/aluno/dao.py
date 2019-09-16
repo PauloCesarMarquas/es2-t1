@@ -83,20 +83,29 @@ class DAOAluno:
 		])[0]
 
 	def listByDisciplina(self, conn, idDisciplina):
-		conn.run('SELECT Aluno.nome, Aluno.matricula\
+		conn.run('SELECT Aluno.id, Aluno.nome, Aluno.matricula\
 			FROM Aluno\
 			INNER JOIN Matricula mat ON mat.idAluno = Aluno.id\
 			INNER JOIN Turma ON Turma.id = mat.idTurma\
 			WHERE Turma.idDisciplina = %s;',
 			(int(idDisciplina),)
 		)
-		return (toObjArray(conn.res(), [ 'nome', 'matricula' ]))
+		return (toObjArray(conn.res(), [ 'id', 'nome', 'matricula' ]))
+
+	def listByTurma(self, conn, idTurma):
+		conn.run('SELECT Aluno.id, Aluno.nome, Aluno.matricula\
+			FROM Aluno\
+			INNER JOIN Matricula mat ON mat.idAluno = Aluno.id\
+			WHERE mat.idTurma = %s;',
+			(int(idTurma),)
+		)
+		return (toObjArray(conn.res(), [ 'id', 'nome', 'matricula' ]))
 
 	def listByCurso(self, conn, idCurso):
 		conn.run('SELECT\
-				nome, matricula\
+				id, nome, matricula\
 			FROM Aluno\
 			WHERE Aluno.idCurso = %s;',
 			(int(idCurso),)
 		)
-		return (toObjArray(conn.res(), [ 'nome', 'matricula' ]))
+		return (toObjArray(conn.res(), [ 'id', 'nome', 'matricula' ]))
