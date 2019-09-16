@@ -3,21 +3,33 @@ from src.nota.dao import DAONota
 from server import add_POST, add_GET
 
 def add(req, data):
+
 	nota = {
 		'valor': data.get('valor'),
 		'idAluno': data.get('idAluno'),
 		'idAvaliacao': data.get('idAvaliacao')
 	}
+
 	conn = Connector()
 	dao = DAONota()
+
 	req.sendJSON(dao.add(conn, nota))
+
 add_POST('/nota/add', add)
 
-# def list(req, data):
-# 	conn = Connector()
-# 	dao = DAONota()
-# 	req.sendJSON(dao.list(conn))
-# add_GET('/nota/list', list)
+def list(req, data):
+
+	idAvaliacao = data.get('idAvaliacao')
+
+	conn = Connector()
+	dao = DAONota()
+
+	if idAvaliacao != None:
+		req.sendJSON(dao.listByAvaliacao(conn, idAvaliacao))
+	else:
+		req.sendJSON(dao.list(conn))
+
+add_GET('/nota/list', list)
 
 # def get(req, data):
 # 	id = data.get('id')
