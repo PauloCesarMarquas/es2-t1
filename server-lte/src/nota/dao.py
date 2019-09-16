@@ -33,6 +33,42 @@ class DAONota():
 			'nomeDisciplina'
 		])
 
+	def listByTurma(self, conn, idTurma):		
+		conn.run('SELECT\
+			Nota.id,\
+			Nota.valor AS valor,\
+			Aluno.nome AS nomeAluno,\
+			Turma.nome AS nomeTurma,\
+		FROM Nota\
+		INNER JOIN Aluno ON Aluno.id = Nota.idAluno\
+		INNER JOIN Turma ON Turma.id = Nota.idTurma\
+		WHERE Turma.id = %s;', int(idTurma))
+
+		return toObjArray(conn.res(), [
+			'id',
+			'nomeAluno',
+			'nomeTurma',
+			'valor'			
+		])
+
+	def listByAluno(self, conn, idAluno):		
+		conn.run('SELECT\
+			Nota.id,\
+			Nota.valor AS valor,\
+			Aluno.nome AS nomeAluno,\
+			Turma.nome AS nomeTurma,\
+		FROM Nota\
+		INNER JOIN Aluno ON Aluno.id = Nota.idAluno\
+		INNER JOIN Turma ON Turma.id = Nota.idTurma\
+		WHERE Aluno.id = %s;', int(idAluno))
+
+		return toObjArray(conn.res(), [
+			'id',
+			'nomeAluno',
+			'nomeTurma',
+			'valor'			
+		])
+
 	def remove(self, conn, id):
 		conn.run('DELETE FROM Nota WHERE id = %s;', (int(id),))
 		return True

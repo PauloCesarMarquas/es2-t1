@@ -9,7 +9,6 @@ class DAOAvaliacao:
 		conn.run('INSERT INTO Avaliacao (nome, nota, idTurma)\
 			VALUES (%s, %s, %s);', (nome, float(nota), int(idTurma)))
 		return conn.id()
-
 	
 	def update(self, conn, avaliacao):
 		id = avaliacao['id']
@@ -47,3 +46,4 @@ class DAOAvaliacao:
 	def listByTurma(self, conn, idTurma):
 		conn.run('SELECT id, nome FROM Avaliacao WHERE idTurma = %s;', (int(idTurma),))
 		return toObjArray(conn.res(), ['id', 'nome'])	
+		

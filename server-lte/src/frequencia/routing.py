@@ -1,20 +1,20 @@
 from connector import Connector
-from src.nota.dao import DAONota
+from src.frequencia.dao import DAOFrequencia
 from server import add_POST, add_GET
 
 def add(req, data):
-	nota = {
+	frequencia = {
 		'idAluno': data.get('idAluno'),
-		'idAvaliacao': data.get('idAvaliacao'),
-		'nota': data.get('nota')
+		'idTurma': data.get('idTurma'),
+		'frequencia': data.get('frequencia')
 	}
-	dao = DAONota()
+	dao = DAOFrequencia()
 	conn = Connector()
-	req.sendJSON(dao.add(conn, nota))	
-add_POST('/nota/add', add)
+	req.sendJSON(dao.add(conn, frequencia))	
+add_POST('/frequencia/add', add)
 
 def list(req, data):
-	dao = DAONota()	
+	dao = DAOFrequencia()	
 	conn = Connector()
 	idTurma = data.get('idTurma')
 	if (idTurma != None):
@@ -22,11 +22,11 @@ def list(req, data):
 	else:
 		array = dao.listByAluno(conn, {data.get('idAluno')})
 	req.sendJSON(dao.list(conn))
-add_GET('/nota/list', list)
+add_GET('/frequencia/list', list)
 
 def remove(req, data):
 	id = data.get('id')
-	dao = DAONota()
+	dao = DAOFrequencia()
 	conn = Connector()
 	req.sendJSON(dao.remove(conn, id))
-add_POST('/nota/remove', remove)
+add_POST('/frequencia/remove', remove)

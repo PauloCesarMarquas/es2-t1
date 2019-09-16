@@ -15,8 +15,19 @@ add_POST('/matricula/add', add)
 def list(req, data):
 	dao = DAOMatricula()
 	conn = Connector()
+	idTurma = data.get('idTurma')
+	if (idTurma != None):
+		req.sendJSON(dao.listByTurma(conn, idTurma))
+	else:
+		req.sendJSON(dao.list(conn))
+add_GET('/matricula/list', list)
+
+def list(req, data):
+	dao = DAOMatricula()
+	conn = Connector()
 	req.sendJSON(dao.list(conn))
 add_GET('/matricula/list', list)
+
 
 def remove(req, data):
 	id = data.get('id')

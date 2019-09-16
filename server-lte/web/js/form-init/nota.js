@@ -91,7 +91,7 @@ System.addFormInit('nota/list', (page, data) => {
 	 	});
 	page.on('click', '[target="remove"]', function(){
 		const id = $(this).closest('tr').find('[name="id"]').val();
-		let error = 'Erro ao remover matrícula';
+		let error = 'Erro ao remover nota';
 		page.userPost('/nota/remove', {id})
 			.then(res => {
 				error = 'Erro ao recarregar Notas';

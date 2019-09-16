@@ -20,3 +20,12 @@ System.addMenuOption({
 		System.openFormPage('turma/list');
 	}
 });
+
+System.addMenuOption({
+	id: 'list-turma',
+	parent_id: 'turmas',
+	title: 'Listar turmas por disciplinas',
+	action: () => {
+		System.openFormPage('turma/list');
+	}
+});
