@@ -18,3 +18,6 @@ import '/js/menu/avaliacao.js';
 
 import '/js/form-init/frequencia.js';
 import '/js/menu/frequencia.js';
+
+import '/js/form-init/nota.js';
+import '/js/menu/nota.js';
