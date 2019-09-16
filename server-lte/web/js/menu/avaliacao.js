@@ -10,3 +10,9 @@ System.addMenuOption({
 	title: 'Adicionar Avaliação',
 	action: () => System.openFormPage('avaliacao/add')
 });
+System.addMenuOption({
+	id: 'avaliacao-list',
+	parent_id: 'avaliacao',
+	title: 'Listar Avaliações',
+	action: () => System.openFormPage('avaliacao/list')
+});
