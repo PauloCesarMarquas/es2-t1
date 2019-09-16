@@ -49,9 +49,13 @@ const loadCursos = page => new Promise((done, fail) => {
 	page.userGet('/curso/list')
 		.then(array => {
 			select.html('');
+			const addOption = (id, nome) => {
+				const option = $.new('option').val(id);
+				select.append(option.append($.txt(nome)));
+			};
+			addOption(null, '');
 			array.forEach(curso => {
-				const option = $.new('option').val(curso.id);
-				select.append(option.append($.txt(curso.nome)));
+				addOption(curso.id, curso.nome);
 			});
 			done();
 		})
@@ -169,7 +173,9 @@ System.addFormInit('aluno/update', (page, data) => {
 			error = 'Falha ao carregar cursos';
 			return loadCursos(page);
 		})
-		.then(page.find('[name="idCurso"]').val(idCurso))
+		.then(() => {
+			page.find('[name="idCurso"]').val(idCurso);
+		})
 		.catch(() => {
 			page.close();
 			System.error(error);

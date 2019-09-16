@@ -58,6 +58,27 @@ const getListFrequencia = page => {
 	return array;
 };
 
+const loadList = (page, data, idTurma) => new Promise((done, fail) => {
+	const table = page.find('table');
+	const map = {0: 'Não', 1: 'Sim'};
+	table.find('tr').not(':eq(0)').remove();
+	page.userGet('/frequencia/list', { idTurma, data })
+		.then(array => {
+			array.forEach(item => {
+				const {nomeAluno, presente} = item;
+				const tr = $.new('tr');
+				const addAttr = value => {
+					tr.append($.new('td').append($.txt(value)));
+				};
+				addAttr(nomeAluno);
+				addAttr(map[presente]);
+				table.append(tr);
+			});
+			done();
+		})
+		.catch(fail);
+});
+
 System.addFormInit('frequencia/add', page => {
 	let error = 'Erro ao carregar turmas';
 	loadTurmas(page)
@@ -85,6 +106,24 @@ System.addFormInit('frequencia/add', page => {
 		const frequencia = getListFrequencia(page);
 		page.userPost('/frequencia/add', { data, idTurma, frequencia, nAlunos })
 			.then(() => System.say('Frequências registradas com sucesso'))
-			.catch(err => System.error('Erro ao registrar frequênciass'));
+			.catch(err => System.error('Erro ao registrar frequências'));
+	});
+});
+
+System.addFormInit('frequencia/por_data', page => {
+	loadTurmas(page)
+		.catch(err => {
+			System.error('Erro ao carregar turmas');
+			page.close();
+		});
+	page.find('[target="submit"]').bind('click', () => {
+		const form_data = page.data();
+		const data = Data.parse(form_data.data);
+		if (!data) {
+			System.error('Informe uma data válida');
+			return;
+		}
+		loadList(page, data, form_data.idTurma)
+			.catch(err => System.error('Erro ao carregar frequências'));
 	});
 });
