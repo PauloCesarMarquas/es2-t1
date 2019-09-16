@@ -32,6 +32,22 @@ const loadAvaliacaoList = page => new Promise((done, fail) => {
 		})
 		.catch(fail);
 });
+const loadTurmaList = page => new Promise((done, fail) => {
+	const select = page.find('[name="idTurma"]')
+	page.userGet('/turma/list')
+		.then(array => {
+			select.html('');
+			array.forEach(turma => {
+				const { id, nome } = turma;
+				const option = $.new('option');
+				option.append($.txt(nome));
+				option.val(id);
+				select.append(option);
+			});
+			done();
+		})
+		.catch(fail);
+});
 const loadList = page => new Promise((done, fail) => {
 	const table = page.find('table');
 	page.userGet('/nota/list')
@@ -82,6 +98,7 @@ System.addFormInit('nota/add', (page, data) => {
 			});
 	});
 });
+
 System.addFormInit('nota/list', (page, data) => {
 	loadList(page)
 	 	.then(() => {
@@ -101,5 +118,69 @@ System.addFormInit('nota/list', (page, data) => {
 			.catch(err => {
 				System.error(error);
 			});
+	});
+});
+
+const loadPorTurma = page => new Promise((done, fail) => {
+	const idTurma = page.find('[name="idTurma"]').val();
+	const table = page.find('table');
+	table.find('tr').not(':eq(0)').remove();
+	page.userGet('/nota/list', {idTurma})
+		.then(array => {
+			array.forEach(item => {
+				const {nome, valor} = item;
+				const tr = $.new('tr');
+				tr.append($.new('td').append($.txt(nome)))
+				tr.append($.new('td').append($.txt(valor)));
+				table.append(tr);
+			});
+			done();
+		})
+		.catch(fail);
+});
+
+
+System.addFormInit('nota/por_turma', page => {
+	loadTurmaList(page)
+		.catch(() => {
+			page.close();
+			System.error('Erro ao carregar turma');
+		});
+	page.find('[target="submit"]').bind('click', () => {
+		loadPorTurma(page)
+			.catch(() => System.error('Erro ao gerar relatório'));
+	});
+});
+
+
+const loadPorAluno = page => new Promise((done, fail) => {
+	const idAluno = page.find('[name="idAluno"]').val();
+	const table = page.find('table');
+	table.find('tr').not(':eq(0)').remove();
+	page.userGet('/nota/list', {idAluno})
+		.then(array => {
+			array.forEach(item => {
+				const {nome, valor, avaliacao} = item;
+				const tr = $.new('tr');
+				tr.append($.new('td').append($.txt(nome)));
+				tr.append($.new('td').append($.txt(valor)));
+				tr.append($.new('td').append($.txt(avaliacao)));
+				table.append(tr);
+			});
+			done();
+		})
+		.catch(fail);
+});
+
+
+System.addFormInit('nota/por_aluno', page => {
+	loadAlunoList(page)	
+		.catch(() => {
+			page.close();
+			System.error('Erro ao carregar aluno');
+		});
+	page.find('[target="submit"]').bind('click', () => {
+		loadPorAluno(page)
+			.catch(() => System.error('Erro ao gerar relatório'));
 	});
 });

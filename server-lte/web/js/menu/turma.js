@@ -17,7 +17,7 @@ System.addMenuOption({
 	parent_id: 'turmas',
 	title: 'Listar turmas',
 	action: () => {
-		System.openFormPage('turma/list');
+		System.openFormPage('turma/por_aluno');
 	}
 });
 
@@ -26,6 +26,6 @@ System.addMenuOption({
 	parent_id: 'turmas',
 	title: 'Listar turmas por disciplinas',
 	action: () => {
-		System.openFormPage('turma/list');
+		System.openFormPage('turma/por_turma');
 	}
 });

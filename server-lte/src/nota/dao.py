@@ -39,9 +39,11 @@ class DAONota():
 			Nota.valor AS valor,\
 			Aluno.nome AS nomeAluno,\
 			Turma.nome AS nomeTurma,\
+			Avaliacao.nome AS nomeAvaliacao,\
 		FROM Nota\
+		INNER JOIN Avaliacao ON Avaliacao.id = Nota.idAvaliacao\
 		INNER JOIN Aluno ON Aluno.id = Nota.idAluno\
-		INNER JOIN Turma ON Turma.id = Nota.idTurma\
+		INNER JOIN Turma ON Turma.id = Avaliacao.idTurma\
 		WHERE Turma.id = %s;', int(idTurma))
 
 		return toObjArray(conn.res(), [
@@ -56,16 +58,16 @@ class DAONota():
 			Nota.id,\
 			Nota.valor AS valor,\
 			Aluno.nome AS nomeAluno,\
-			Turma.nome AS nomeTurma,\
-		FROM Nota\
+			Avaliacao.nome AS nomeAvaliacao,\
+		FROM Nota \
+		INNER JOIN Avaliacao ON Avaliacao.id = Nota.idAvaliacao\
 		INNER JOIN Aluno ON Aluno.id = Nota.idAluno\
-		INNER JOIN Turma ON Turma.id = Nota.idTurma\
 		WHERE Aluno.id = %s;', int(idAluno))
 
 		return toObjArray(conn.res(), [
 			'id',
 			'nomeAluno',
-			'nomeTurma',
+			'nomeAvaliacao',
 			'valor'			
 		])
 
